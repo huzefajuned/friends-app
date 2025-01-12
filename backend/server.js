@@ -5,15 +5,21 @@ const dotenv = require("dotenv");
 
 // import routes
 const authRoutes = require("./routes/auth");
+const usersRoutes = require ('./routes/users')
+const friendsRoutes = require ('./routes/friends')
+
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cors())
+// app.use(cors({
+//   origin: 'http://localhost:5173'
+// }));
 
 // Connect to MongoDB
-mongoose
+mongoose  
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
   })
@@ -26,6 +32,9 @@ app.use("/api/test", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use('/api/users', usersRoutes)
 
-const PORT = process.env.PORT || 5000;
+app.use('/api/friends', friendsRoutes)
+
+const PORT = process.env.PORT || 3301;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

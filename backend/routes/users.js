@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/search', auth, async (req, res) => {
   try {
     const { query } = req.query;
+    console.log('query in server',query)
     const users = await User.find({ 
       username: { $regex: query, $options: 'i' },
       _id: { $ne: req.user._id }
@@ -55,5 +56,5 @@ router.get('/recommendations', auth, async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
 

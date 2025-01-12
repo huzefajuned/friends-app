@@ -1,10 +1,11 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
+const auth = require('../middleware/auth')
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
+  console.log("signup  api hit!");
   try {
     const { username, password, interests } = req.body;
     const user = new User({ username, password, interests });
@@ -29,6 +30,18 @@ router.post("/login", async (req, res) => {
     res.json({ token, userId: user._id });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error: error.message });
+  }
+});
+
+// New route to verify the token and return user data
+router.get("/me", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    res.json(user);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching user data", error: error.message });
   }
 });
 

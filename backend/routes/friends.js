@@ -5,11 +5,11 @@ const auth = require("../middleware/auth.js");
 const router = express.Router();
 
 router.post("/request", auth, async (req, res) => {
+  console.log('frineds request body ', req.body)
   try {
     const { friendId } = req.body;
     const user = await User.findById(req.user._id);
     const friend = await User.findById(friendId);
-
     if (!friend) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -124,4 +124,4 @@ router.get("/list", auth, async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
